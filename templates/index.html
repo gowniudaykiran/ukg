@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container bg  rounded  p-3 " style="background-color: rgba(240, 255, 255, 0.74);">
+        {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+                <center>
+                    <H2>
+                        WELCOME ADMIN.You can manage the student records and book records online through this website
+                    </H2>
+                </center>  
+            {% else %}
+                <center>
+                    <H2>
+                    WELCOME {{student.name}}<br>
+                        Browse Our Library for Books.You can also take upto {{limit}} books for 30 days without fine.keep track of the deadline to return books to avoid fine.
+                    </H2>
+                </center>
+            {% endif %}
+        {% else %}
+        <center>
+            <H1>
+               This is an online initiative to digitalize the library management system.
+            </H1>
+        {% endif%}
+        </center>
+        
+    </div>
+    <center>
+        {% if not user.is_superuser %}
+            <div class="container mt-5 p-3" style="background-color: rgba(240, 255, 255, 0.753);">
+            <h1>Messages:</h1>
+            {% for m in brw %}
+
+                <div class="alert alert-primary alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {% if m.return_date <= today %}
+                    <p style="font-size: 20px;"> <strong>Attention!</strong>You have missed the deadline {{m.return_date}} to return the book "{{m.book.title}}" that you have borrowed on  {{m.issue_date}}.Return or reissue it by paying fine in library as soon as possible to avoid extra fine. </p>
+                    {% else %}
+                    <p style="font-size: 20px;"> <strong>Attention!</strong>The book "{{m.book.title}}" you have borrowed on {{m.issue_date}} should be returned or re issued on or before  {{ m.return_date}} to avoid fine of Rs.1 per day on this book</p>
+                    {% endif %}
+                </div>
+                
+            {% endfor %}
+            </div>
+        {% endif %}
+    </center>
+{% endblock %}

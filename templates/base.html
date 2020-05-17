@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% block title %}<title>Local Library</title>{% endblock %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+ <!-- Add additional CSS in static file -->
+    {% load static %}
+
+    <style>
+
+        {% block style %}
+        {% endblock %}
+
+        body {
+            background: url("{% static 'lib.jpg' %}");
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container-fluid my-auto">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="{% url 'index' %}">MY LIBRARY </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'books' %}">Books</a>
+                </li>
+
+                {% if user.is_superuser %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_create' %}">Add Student</a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'book_create' %}">Add Book</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_list' %}">StudentList</a>
+                    </li>
+
+                {% endif %}
+                </li>
+               
+                    {% if user.is_authenticated %}
+                            <div class="dropdown float">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                Account
+                                </button>
+                                <div class="dropdown-menu">
+                                {% if not user.is_superuser %}
+                                <a class="dropdown-item" href="{% url 'book_student' %}">ISSUED_BOOKS</a>
+                                {% endif %}
+                                <a class="dropdown-item" href="{% url 'password_reset' %}">Reset Password</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                </div>
+                            </div>
+                            
+
+                    {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                    {% endif %}
+            </ul>
+            {% if user.is_authenticated %}
+                {% if not user.is_superuser %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><a href="{% url 'profile' %} " class="nav-link"><img src="{% static 'profile.png' %}" alt="" style="width: 20px;height:20px;">My profile</a></li>
+                    </ul>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </nav>
+    <br>
+    <div class="row mt-5 mx-auto">
+        <div class="col-sm-12">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+<script>
+{% block javascript %}
+{% endblock %}
+</script>
+</html>

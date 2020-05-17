@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+   <center> <form class="form" id="searchform" action="{% url 'search_s' %}" method="get">
+    <div class="form-group">
+    <input type="text" class="col-5  form-control-lg"  placeholder="enter student Roll_no or name or email" name="q" type="text"/>
+    <button type="button"  class="btn btn-success form-control-lg btn-lg" onclick="searchform.submit()">search</button>
+        </div>
+</form>
+   </center>
+    <div class="bg " style="background-color: rgba(240, 255, 255, 0.87);">
+        <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">roll no</th>
+                <th scope="col">name</th>
+                <th scope="col">email</th>
+                <th scope='col'></th>
+              </tr>
+            </thead>
+            <tbody>
+        {% for s in students %}
+                  <tr>
+                    <th scope="row">{{s.roll_no}}</th>
+                    <td>{{s.name}}</td>
+                    <td>{{s.email}}</td>
+                    <td><a  class="btn btn-success btn-md" style=" padding-left:20px;padding-right:20px;" href="{% url 'student_detail' pk=s.id %}">view</a></td>
+                  </tr>
+        {% endfor %}
+            </tbody>
+    </div>
+{% endblock %}
