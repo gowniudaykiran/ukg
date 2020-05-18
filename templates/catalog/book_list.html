@@ -10,21 +10,22 @@
       </form>
    </center>
    {%if all%}
-      <h1 style="text-align: center;background-color: rgba(35, 233, 233, 0.74);">Books List</h1>
+      <h1 style="text-align: center;background-color: rgba(252, 253, 253, 0.74);">Books List</h1>
    {% else %}
-      <h1 style="text-align: center;background-color: rgba(71, 230, 230, 0.74);"> Borrowed Books List</h1>
+      <h1 style="text-align: center;background-color: rgba(246, 251, 251, 0.74);"> Borrowed Books List</h1>
    {% endif %}
 
 
     {% if book_list %}
 
         <div class="row mx-auto p-3 m-3">
-          {% for book in book_list %}
+          {% for book in page_obj %}
             <div class="mx-3 col-md-4 col-lg-3 mb-4 shadow p-2 mb-4  rounded" style="background-color: rgba(240, 255, 255, 0.74);">
               <div class="card mx-auto text-center ">
               <img class="card-img-top" src="{{ book.pic.url }}" alt="Sample Title" height="200px" width="300px">
                 <div class="card-body">
-                  <h2 class="card-title">    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}})</h2>
+                  <h3 class="card-title">    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> </h3>
+                  <h3>{{book.author}}</h3>
                 </div>
               </div>
             </div>
@@ -34,6 +35,27 @@
 
     {% else %}
       <p class=" bg p-3 mt-3" style="background-color: rgba(240, 255, 255, 0.74);">There are no books.</p>
-    {% endif %}       
+    {% endif %}  
+
+    <div class="pagination">
+     
+          {% if page_obj.has_previous %}
+              <a class="pagination-number" href="?page=1"> first</a>
+              <a class="pagination-number pagination-action" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+          {% endif %}
+  
+         {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <span class="pagination-number pagination-current">{{num}}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                  <a class="pagination-number" href="?page={{num}}">{{num}}</a>
+                {% endif%}
+         {% endfor %}
+          {% if page_obj.has_next %}
+              <a class="pagination-number" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+              <a class="pagination-number" href="?page={{ page_obj.paginator.num_pages }}">last </a>
+          {% endif %}
+      
+  </div> 
 {% endblock %}
 
