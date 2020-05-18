@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-
+from django.core.paginator import Paginator
 from .models import *
 from .forms import *
 # .FORMS REFERS TO THE FORMS.PY IN CURRENT DIRECTORY AND * USED FOR IMPORTING EVERYTHING
@@ -63,6 +63,9 @@ def profile(request):
 def BookListView(request):
     all=True
     book_list = Book.objects.all()
+    paginator = Paginator(book_list,2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # MODELNAME.objects.all() is used to get all objects i.e. tuples from database
     return render(request, 'catalog/book_list.html', locals())
 
